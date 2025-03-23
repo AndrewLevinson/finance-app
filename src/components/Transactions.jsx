@@ -1,4 +1,5 @@
 import Nav from './Nav';
+import { useTransactionsStore } from '../store';
 import { useState, useEffect } from 'react';
 import { csvParse } from 'd3';
 import checking from '../files/checking.csv';
@@ -23,6 +24,9 @@ function Transactions() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
+  const updateTransactions = useTransactionsStore(state => state.updateTransactions);
+
+  // should make hook to load data and choose which account it is
   useEffect(() => {
     const loadFiles = async () => {
       setLoading(true);
@@ -75,6 +79,11 @@ function Transactions() {
     return <div>Error: {error.message}</div>;
   }
 
+  const saveData = () => {
+    if (!data) return console.warn('oops no data');
+    updateTransactions(data);
+  };
+
   // const sortedData = data.sort((a, b) => new Date(b.date) - new Date(a.date));
 
   const latestTransactions = data
@@ -99,6 +108,10 @@ function Transactions() {
     <div className='my-10 mx-auto w-full max-w-5xl'>
       <Nav />
       <h2 className='text-2xl font-bold mb-3'>Latest transactions</h2>
+      <div className='flex gap-2'>
+        <button onClick={() => saveData()}>store data</button>
+        <button onClick={() => updateTransactions({})}>clear data</button>
+      </div>
       <table>
         <thead>
           <tr className='sticky top-0 [&>th]:p-2 bg-white border-b-2'>
