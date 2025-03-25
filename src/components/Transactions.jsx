@@ -105,7 +105,7 @@ function Transactions() {
     });
 
   return (
-    <div className='my-10 mx-auto w-full max-w-5xl'>
+    <div className='my-10 mx-auto w-full max-w-5xl p-5'>
       <Nav />
       <h2 className='text-2xl font-bold mb-3'>Latest transactions</h2>
       <div className='flex gap-2'>
