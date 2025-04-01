@@ -17,7 +17,7 @@ export default function MyAppNav() {
             key={route.route}
             to={route.route}
             end
-            className={({ isActive }) => (isActive ? 'text-red-500 relative' : 'text-black relative')}
+            className={({ isActive }) => (isActive ? 'text-blue-900 font-semibold relative' : 'text-black relative')}
           >
             {route.route == '/transactions' && (
               <div className='text-center text-slate-500 text-sm absolute -top-1/2 left-1/2 -translate-1/2 w-20 tabular-nums'>
