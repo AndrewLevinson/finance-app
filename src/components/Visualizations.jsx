@@ -61,9 +61,9 @@ function Visualizations() {
         <h4 className='text-slate-400 font-semibold uppercase text-sm'>Net Worth</h4>
         <div className='flex gap-2 items-baseline'>
           <p className='font-semibold text-2xl'>{formatter(currentNetWorth, 'currency')}</p>
-          <p className='text-slate-400 italic'>
+          <p className={`${differenceRaw > 0 ? 'text-green-700' : 'text-red-700'} italic`}>
             {differenceRaw < 0 ? '↓' : '↑'} {formatter(differenceRaw, 'currency')} (
-            {formatter(differencePercent, 'percent', 1)}) {compareDate.name}
+            {formatter(differencePercent, 'percent', 1)}) <span className='text-slate-400'>{compareDate.name}</span>
           </p>
         </div>
       </div>
