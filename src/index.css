@@ -13,13 +13,20 @@
   h6,
   p,
   span,
-  button {
+  button,
+  select,
+  input {
     @apply text-gray-950 dark:text-gray-200;
   }
 
   body,
   html {
     @apply bg-white dark:bg-gray-950;
+  }
+
+  *::selection {
+    color: #fff;
+    background: #222;
   }
 }
 
