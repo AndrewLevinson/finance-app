@@ -1,7 +1,30 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
-@layer components {
+@theme {
+  --main-chart: oklch(0.546 0.245 262.881);
+}
+
+@layer base {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  p,
+  span,
+  button {
+    @apply text-gray-950 dark:text-gray-200;
+  }
+
+  body,
+  html {
+    @apply bg-white dark:bg-gray-950;
+  }
+}
+
+/* @layer components {
     path {
         transition: 0.3s ease-in-out all;
     }
-}
+} */

@@ -3,13 +3,17 @@ import Nav from './Nav';
 import balanceSheetData from '../files/net_worth.json';
 import { accountLookup, formatter } from '../utils';
 import { ResponsiveContainer, AreaChart, Area, CartesianGrid, XAxis, YAxis, Tooltip } from 'recharts';
-import { format } from 'date-fns';
+import { format as dateFormatter } from 'date-fns';
 
 const timeLookup = {
   2: 'since last month',
   4: 'since 3 months ago',
   7: 'since 6 months ago',
   13: 'since 1 year ago',
+};
+
+const nameLookup = {
+  netWorth: 'Net worth',
 };
 
 function Visualizations() {
@@ -35,11 +39,24 @@ function Visualizations() {
   const differenceRaw = currentNetWorth - priorNetWorth;
   const differencePercent = differenceRaw / priorNetWorth;
 
+  const CustomTooltip = ({ active, payload, label }) => {
+    if (active && payload && payload.length) {
+      const { name, value } = payload[0];
+      return (
+        <div className='bg-white p-2 shadow-sm border-t-2 border-t-[var(--main-chart)]'>
+          <p className='uppercase text-xs font-semibold tracking-tight text-slate-400'>{nameLookup[name]}</p>
+          <p className=''>{`${dateFormatter(label, 'MMM yy')} : ${formatter(value)}`}</p>
+        </div>
+      );
+    }
+    return null;
+  };
+
   return (
     <div className='my-10 mx-auto w-full max-w-5xl px-5'>
       {/* <Nav /> */}
       <div className='mb-10'>
-        <h1 className='text-4xl font-bold mb-0.5'>Dashboard</h1>
+        <h1 className='text-4xl font-bold mb-0.5'>Welcome, Andrew</h1>
         <h2 className='text-lg text-gray-500 mb-2'>
           Loaded {initialData?.length} months of balance sheet data from {balanceSheetData.start} to{' '}
           {balanceSheetData.lastUpdate}
@@ -60,7 +77,7 @@ function Visualizations() {
       <div className='my-5'>
         <h4 className='text-slate-400 font-semibold uppercase text-sm'>Net Worth</h4>
         <div className='flex gap-2 items-baseline'>
-          <p className='font-semibold text-2xl'>{formatter(currentNetWorth, 'currency')}</p>
+          <p className='font-semibold text-3xl'>{formatter(currentNetWorth, 'currency')}</p>
           <p className={`${differenceRaw > 0 ? 'text-green-700' : 'text-red-700'} italic`}>
             {differenceRaw < 0 ? '↓' : '↑'} {formatter(differenceRaw, 'currency')} (
             {formatter(differencePercent, 'percent', 1)}) <span className='text-slate-400'>{compareDate.name}</span>
@@ -72,12 +89,17 @@ function Visualizations() {
           <AreaChart data={netWorth} margin={{ top: 10, right: 20, bottom: 5, left: 5 }}>
             <defs>
               <linearGradient id='grad' x1='0' y1='0' x2='0' y2='1'>
-                <stop offset='5%' stopColor='teal' stopOpacity={0.6} />
-                <stop offset='95%' stopColor='teal' stopOpacity={0.1} />
+                <stop offset='5%' stopColor='var(--main-chart)' stopOpacity={0.6} />
+                <stop offset='95%' stopColor='var(--main-chart)' stopOpacity={0.1} />
               </linearGradient>
             </defs>
             <CartesianGrid stroke='#000' strokeOpacity={0.1} vertical={false} />
-            <XAxis dataKey='date' tickMargin={12} tickFormatter={value => format(value, 'MMM yy')} minTickGap={30} />
+            <XAxis
+              dataKey='date'
+              tickMargin={12}
+              tickFormatter={value => dateFormatter(value, 'MMM yy')}
+              minTickGap={30}
+            />
             <YAxis
               tickFormatter={value => `${formatter(value / 1000)}k`}
               domain={['dataMin', 'auto']}
@@ -88,12 +110,12 @@ function Visualizations() {
             <Area
               type={'monotone'}
               dataKey='netWorth'
-              stroke='teal'
+              stroke='var(--main-chart)'
               strokeWidth={2}
               fill='url(#grad)'
               fillOpacity={0.8}
             />
-            <Tooltip />
+            <Tooltip content={<CustomTooltip />} />
           </AreaChart>
         </ResponsiveContainer>
       </div>
