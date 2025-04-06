@@ -3,7 +3,7 @@ import { useTransactionsStore } from '../store';
 export default function MyAppNav() {
   const routes = [
     { route: '/', name: 'Home' },
-    { route: '/transactions', name: 'Transactions' },
+    // { route: '/transactions', name: 'Transactions' },
     { route: '/visualizations', name: 'Dashboard' },
   ];
 
