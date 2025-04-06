@@ -4,18 +4,18 @@ import balanceSheetData from '../files/net_worth.json';
 import { accountLookup } from '../utils';
 import LineChart from './charts/LineChart';
 
-const timeLookup = {
-  4: 'year to date',
-  2: 'since last month',
-  4: 'since 3 months ago',
-  7: 'since 6 months ago',
-  13: 'since 1 year ago',
-  25: 'since 2 years ago',
-};
-
 function Visualizations() {
   const initialData = balanceSheetData.months;
-  const [compareDate, setCompareDate] = useState({ value: 4, name: 'year to date' });
+  const timeLookup = {
+    [balanceSheetData.ytdKey]: 'year to date',
+    2: 'since last month',
+    4: 'since 3 months ago',
+    7: 'since 6 months ago',
+    13: 'since 1 year ago',
+    25: 'since 2 years ago',
+  };
+
+  const [compareDate, setCompareDate] = useState({ value: balanceSheetData.ytdKey, name: 'year to date' });
 
   const data = useMemo(() => {
     if (!initialData) return;
@@ -49,7 +49,7 @@ function Visualizations() {
           }}
           className='m-0'
         >
-          <option value='4'>Year-to-date</option>
+          <option value={balanceSheetData.ytdKey}>Year-to-date</option>
           <option value='2'>Since last month</option>
           <option value='4'>Since 3 months ago</option>
           <option value='7'>Since 6 months ago</option>
