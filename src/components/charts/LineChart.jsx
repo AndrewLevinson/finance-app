@@ -2,15 +2,19 @@ import { formatter } from '../../utils';
 import { format as dateFormatter } from 'date-fns';
 import { ResponsiveContainer, AreaChart, Area, CartesianGrid, XAxis, YAxis, Tooltip } from 'recharts';
 
-function NetWorth({ data, comparisons, compareDate }) {
-  const { currentNetWorth, differenceRaw, differencePercent } = comparisons;
+function LineChart({ data, dataKey, name, compareDate }) {
+  // calculations
+  const currentValue = data[data.length - 1][dataKey];
+  const priorValue = data[data.length - compareDate.value][dataKey];
+  const differenceRaw = currentValue - priorValue;
+  const differencePercent = differenceRaw / priorValue;
 
   const CustomTooltip = ({ active, payload, label }) => {
     if (active && payload && payload.length) {
       const { name, value } = payload[0];
       return (
         <div className='bg-white dark:bg-gray-900 p-2 shadow-sm border-t-2 border-t-[var(--main-chart)]'>
-          <p className='uppercase text-xs font-semibold tracking-tight text-slate-400'>Net worth</p>
+          <p className='uppercase text-xs font-semibold tracking-tight text-slate-400'>{name}</p>
           <p className='dark:text-slate-300'>{`${dateFormatter(label, 'MMM yy')} : ${formatter(value)}`}</p>
         </div>
       );
@@ -20,9 +24,9 @@ function NetWorth({ data, comparisons, compareDate }) {
 
   return (
     <div>
-      <h4 className='text-slate-400 font-semibold uppercase text-sm'>Net Worth</h4>
+      <h4 className='text-slate-400 font-semibold uppercase text-sm'>{name}</h4>
       <div className='flex gap-2 items-baseline mb-10'>
-        <p className='font-semibold text-3xl'>{formatter(currentNetWorth, 'currency')}</p>
+        <p className='font-semibold text-3xl'>{formatter(currentValue, 'currency')}</p>
         <p className={`${differenceRaw > 0 ? 'text-green-700' : 'text-red-700'} italic`}>
           {differenceRaw < 0 ? '↓' : '↑'} {formatter(differenceRaw, 'currency')} (
           {formatter(differencePercent, 'percent', 1)}) <span className='text-slate-400'>{compareDate.name}</span>
@@ -52,7 +56,7 @@ function NetWorth({ data, comparisons, compareDate }) {
           />
           <Area
             type={'monotone'}
-            dataKey='netWorth'
+            dataKey={dataKey}
             stroke='var(--main-chart)'
             strokeWidth={2}
             fill='url(#grad)'
@@ -65,4 +69,4 @@ function NetWorth({ data, comparisons, compareDate }) {
   );
 }
 
-export default NetWorth;
+export default LineChart;

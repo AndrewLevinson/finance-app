@@ -1,38 +1,37 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useMemo } from 'react';
 import Nav from './Nav';
 import balanceSheetData from '../files/net_worth.json';
-import { accountLookup, formatter } from '../utils';
-import NetWorth from './charts/NetWorth';
+import { accountLookup } from '../utils';
+import LineChart from './charts/LineChart';
 
 const timeLookup = {
+  4: 'year to date',
   2: 'since last month',
   4: 'since 3 months ago',
   7: 'since 6 months ago',
   13: 'since 1 year ago',
+  25: 'since 2 years ago',
 };
 
 function Visualizations() {
   const initialData = balanceSheetData.months;
-  const [compareDate, setCompareDate] = useState({ value: 2, name: 'since last month' });
+  const [compareDate, setCompareDate] = useState({ value: 4, name: 'year to date' });
 
-  const netWorth = useMemo(() => {
+  const data = useMemo(() => {
     if (!initialData) return;
     return initialData.map(month => {
       const totalAssets = Object.values(month.amounts).reduce((a, b) => a + (b > 0 ? b : 0), 0);
       const totalDebt = Object.values(month.amounts).reduce((a, b) => a + (b < 0 ? b : 0), 0);
+      const totalInvestments = Object.keys(month.amounts).reduce((a, b) => {
+        return a + (accountLookup[b] == 'investment' ? month.amounts[b] : 0);
+      }, 0);
       const netWorth = totalAssets + totalDebt;
-      const monthlyBalance = { totalAssets, totalDebt };
+      // const monthlyBalance = { totalAssets, totalDebt };
 
-      return { ...month, monthlyBalance, netWorth };
+      return { ...month, totalInvestments, netWorth, cash: month.amounts.cash };
     });
   }, [initialData]);
-
-  // calculations
-  const currentNetWorth = netWorth[netWorth.length - 1].netWorth;
-  const priorNetWorth = netWorth[netWorth.length - compareDate.value].netWorth;
-  const differenceRaw = currentNetWorth - priorNetWorth;
-  const differencePercent = differenceRaw / priorNetWorth;
-  const comparisons = { currentNetWorth, differenceRaw, differencePercent };
+  // console.log(data);
 
   return (
     <div className='my-10 mx-auto w-full max-w-5xl px-5'>
@@ -50,22 +49,24 @@ function Visualizations() {
           }}
           className='m-0'
         >
+          <option value='4'>Year-to-date</option>
           <option value='2'>Since last month</option>
           <option value='4'>Since 3 months ago</option>
           <option value='7'>Since 6 months ago</option>
           <option value='13'>Since 1 year ago</option>
+          <option value='25'>Since 2 years ago</option>
         </select>
       </div>
 
       <div className='grid gap-8 grid-cols-2'>
         <div className='col-span-2 shadow-sm border-[0.5px] border-slate-100 dark:border-slate-700 p-4 rounded-sm'>
-          <NetWorth data={netWorth} comparisons={comparisons} compareDate={compareDate} />
+          <LineChart data={data} dataKey={'netWorth'} name={'Net Worth'} compareDate={compareDate} />
         </div>
         <div className='shadow-sm border-[0.5px] border-slate-100 dark:border-slate-700 p-4 rounded-sm'>
-          <NetWorth data={netWorth} comparisons={comparisons} compareDate={compareDate} />
+          <LineChart data={data} dataKey={'cash'} name={'Cash'} compareDate={compareDate} />
         </div>
         <div className='shadow-sm border-[0.5px] border-slate-100 dark:border-slate-700 p-4 rounded-sm'>
-          <NetWorth data={netWorth} comparisons={comparisons} compareDate={compareDate} />
+          <LineChart data={data} dataKey={'totalInvestments'} name={'Investments'} compareDate={compareDate} />
         </div>
       </div>
     </div>

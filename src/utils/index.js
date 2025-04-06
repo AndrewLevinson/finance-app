@@ -3,14 +3,14 @@ function numberWithCommas(x) {
 }
 
 const accountLookup = {
-  cash: ['asset'],
-  fidelity401k: ['asset', 'investment'],
-  fidelityHSA: ['asset', 'investment'],
-  etradeRothIra: ['asset', 'investment'],
-  savingsBonds: ['asset', 'investment'],
-  otherAssets: ['asset', 'investment'],
-  studentLoan: ['debt', 'long term debt'],
-  ccDebt: ['debt', 'short term debt'],
+  cash: 'cash',
+  fidelity401k: 'investment',
+  fidelityHSA: 'investment',
+  etradeRothIra: 'investment',
+  savingsBonds: 'investment',
+  otherAssets: 'investment',
+  studentLoan: 'debt',
+  ccDebt: 'debt',
 };
 
 function formatter(value, style = 'currency', places = 0) {
