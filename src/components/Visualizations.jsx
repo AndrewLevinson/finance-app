@@ -34,7 +34,7 @@ function Visualizations() {
   // console.log(data);
 
   return (
-    <div className='my-10 mx-auto w-full max-w-5xl px-5'>
+    <div className='my-10 mx-auto w-full max-w-7xl px-5'>
       {/* <Nav /> */}
       <div className='mb-5'>
         <h1 className='text-4xl font-bold mb-0.5'>Welcome, Andrew</h1>
@@ -58,15 +58,21 @@ function Visualizations() {
         </select>
       </div>
 
-      <div className='grid gap-8 grid-cols-2'>
-        <div className='col-span-2 shadow-sm border-[0.5px] border-slate-100 dark:border-slate-700 p-4 rounded-sm'>
-          <LineChart data={data} dataKey={'netWorth'} name={'Net Worth'} compareDate={compareDate} />
+      <div className='grid grid-cols-1 lg:grid-cols-3 lg:grid-rows-4 gap-5'>
+        <div className='lg:col-span-2 lg:row-span-4 shadow-sm border-[0.5px] border-slate-100 dark:border-slate-700 p-4 rounded-sm'>
+          <LineChart data={data} dataKey={'netWorth'} name={'Net Worth'} compareDate={compareDate} size={'large'} />
         </div>
-        <div className='shadow-sm border-[0.5px] border-slate-100 dark:border-slate-700 p-4 rounded-sm'>
-          <LineChart data={data} dataKey={'cash'} name={'Cash'} compareDate={compareDate} />
+        <div className='lg:row-span-2 lg:col-start-3 shadow-sm border-[0.5px] border-slate-100 dark:border-slate-700 p-4 rounded-sm'>
+          <LineChart data={data} dataKey={'cash'} name={'Cash'} compareDate={compareDate} size={'small'} />
         </div>
-        <div className='shadow-sm border-[0.5px] border-slate-100 dark:border-slate-700 p-4 rounded-sm'>
-          <LineChart data={data} dataKey={'totalInvestments'} name={'Investments'} compareDate={compareDate} />
+        <div className='lg:row-span-2 lg:col-start-3 lg:row-start-3 shadow-sm border-[0.5px] border-slate-100 dark:border-slate-700 p-4 rounded-sm'>
+          <LineChart
+            data={data}
+            dataKey={'totalInvestments'}
+            name={'Investments'}
+            compareDate={compareDate}
+            size={'small'}
+          />
         </div>
       </div>
     </div>
