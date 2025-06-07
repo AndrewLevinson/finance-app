@@ -15,7 +15,7 @@ function Visualizations() {
     25: 'since 2 years ago',
   };
 
-  const [compareDate, setCompareDate] = useState({ value: balanceSheetData.ytdKey, name: 'year to date' });
+  const [compareDate, setCompareDate] = useState({ value: 2, name: 'since last month' });
 
   const data = useMemo(() => {
     if (!initialData) return;
@@ -48,6 +48,7 @@ function Visualizations() {
             setCompareDate({ value: e.target.value, name: timeLookup[e.target.value] });
           }}
           className='m-0'
+          defaultValue={compareDate.value}
         >
           <option value={balanceSheetData.ytdKey}>Year-to-date</option>
           <option value='2'>Since last month</option>
